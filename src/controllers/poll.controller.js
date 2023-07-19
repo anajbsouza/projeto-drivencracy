@@ -23,6 +23,7 @@ export async function createPoll(req, res) {
 export async function returnPoll(req, res) {
     try {
         const polls = await db.collection("polls").find().toArray();
+        console.log(polls);
         res.send(polls);
     } catch(err) {
         res.status(500).send(err.message)
@@ -31,7 +32,7 @@ export async function returnPoll(req, res) {
 
 export async function voteOptions(req, res) {
     try {
-
+        
     } catch(err) {
         res.status(500).send(err.message)
     }

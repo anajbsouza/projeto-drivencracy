@@ -9,7 +9,7 @@ export async function createChoice (req, res) {
 
         if (!title) return res.sendStatus(422);
         
-        const poll = await db.collection("polls").findOne({ _id: pollId });
+        const poll = await db.collection("polls").findOne({ _id: new ObjectId (pollId) });
         if (!poll) return res.sendStatus(404);
 
         const now = dayjs();
