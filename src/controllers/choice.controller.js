@@ -6,6 +6,7 @@ export async function createChoice (req, res) {
 
     try {
         let { title, pollId } = req.body;
+        console.log('Title:', title, 'Poll ID:', pollId);
 
         if (!title) return res.sendStatus(422);
         
@@ -28,7 +29,10 @@ export async function createChoice (req, res) {
 
 export async function showVote (req, res) {
     try {
-
+        const result = await db.collection("choices").insertOne({ title, pollId });
+        console.log('Insert result:', result);
+        console.log(choices);
+        res.send(choices);
     } catch(err) {
         res.status(500).send(err.message)
     }
