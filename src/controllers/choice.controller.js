@@ -17,7 +17,7 @@ export async function createChoice (req, res) {
         if (dayjs(poll.expireAt).isBefore(now)) return res.sendStatus(403);
 
         const existingChoice = await db.collection("choices").findOne({ title, pollId });
-        if (existingChoice) return res.status(409);
+        if (existingChoice) return res.sendStatus(409);
 
         await db.collection("choices").insertOne({ title, pollId });
         res.sendStatus(201);

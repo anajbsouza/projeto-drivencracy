@@ -7,8 +7,12 @@ dayjs.extend(duration);
 
 export async function createPoll(req, res) {
     let { title, expireAt } = req.body;
+    console.log(title);
+    title = title.trim();
+    console.log(title);
 
     try {
+        if(!title) return res.sendStatus(422);
         if(!expireAt) {
             expireAt = dayjs().add(dayjs.duration(30, 'day')).format('YYYY-MM-DD HH:mm');
         }
