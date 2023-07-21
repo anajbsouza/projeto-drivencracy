@@ -6,7 +6,6 @@ export async function createChoice (req, res) {
 
     try {
         let { title, pollId } = req.body;
-        console.log('Title:', title, 'Poll ID:', pollId);
 
         if (!title) return res.sendStatus(422);
         
@@ -31,9 +30,6 @@ export async function showVote (req, res) {
     try {
         const choiceId = new ObjectId(req.params.id);
         const choice = await db.collection("choices").findOne({ _id: choiceId });
-
-        console.log("ChoiceID:", choiceId)
-        console.log("Choice:", choice)
 
         if (!choice) return res.sendStatus(404);
 

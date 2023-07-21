@@ -7,9 +7,7 @@ dayjs.extend(duration);
 
 export async function createPoll(req, res) {
     let { title, expireAt } = req.body;
-    console.log(title);
     title = title.trim();
-    console.log(title);
 
     try {
         if(!title) return res.sendStatus(422);
@@ -26,7 +24,6 @@ export async function createPoll(req, res) {
 export async function returnPoll(req, res) {
     try {
         const polls = await db.collection("polls").find().toArray();
-        console.log(polls);
         res.send(polls);
     } catch(err) {
         res.status(500).send(err.message)
@@ -41,7 +38,6 @@ export async function voteOptions(req, res) {
         if (!poll) return res.sendStatus(404);
 
         const choices = await db.collection("choices").find({ pollId }).toArray();
-        console.log(choices);
         res.send(choices);
     } catch(err) {
         res.status(500).send(err.message);
@@ -61,7 +57,6 @@ export async function showResult(req, res) {
 
         for (let choice of choices) {
             const votesCount = await db.collection("votes").countDocuments({ choiceId: choice._id });
-            console.log("Votes for choice " + choice._id + ": " + votesCount);
 
             if (votesCount > maxVotes) {
                 maxVotes = votesCount;
@@ -72,7 +67,6 @@ export async function showResult(req, res) {
             }
         }
 
-        console.log(result)
         res.status(200).send({poll, result});
 
     } catch(err) {
