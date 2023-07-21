@@ -20,7 +20,7 @@ export async function createChoice (req, res) {
         if (existingChoice) return res.status(409);
 
         await db.collection("choices").insertOne({ title, pollId });
-        res.sendStatus(201)
+        res.sendStatus(201);
 
     } catch(err) {
         res.status(500).send(err.message)
@@ -29,10 +29,22 @@ export async function createChoice (req, res) {
 
 export async function showVote (req, res) {
     try {
-        const result = await db.collection("choices").insertOne({ title, pollId });
-        console.log('Insert result:', result);
-        console.log(choices);
-        res.send(choices);
+        const choiceId = req.params.id;
+        const choice = await db.collection("choices").findOne({ _id: new ObjectId(choiceId) });
+
+        console.log("ChoiceID:", choiceId)
+        console.log("Choice:", choice)
+
+        if (!choice) return res.sendStatus(404);
+
+        const poll = await db.collection("polls").findOne({ _id: new ObjectId(choice.pollId) });
+
+        const now = dayjs();
+        if (dayjs(poll.expireAt).isBefore(now)) return res.sendStatus(403);
+
+        await db.collection("votes").insertOne({ choiceId, votedAt: new Date() });
+        res.sendStatus(201);
+
     } catch(err) {
         res.status(500).send(err.message)
     }
