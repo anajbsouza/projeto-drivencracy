@@ -29,8 +29,8 @@ export async function createChoice (req, res) {
 
 export async function showVote (req, res) {
     try {
-        const choiceId = req.params.id;
-        const choice = await db.collection("choices").findOne({ _id: new ObjectId(choiceId) });
+        const choiceId = new ObjectId(req.params.id);
+        const choice = await db.collection("choices").findOne({ _id: choiceId });
 
         console.log("ChoiceID:", choiceId)
         console.log("Choice:", choice)

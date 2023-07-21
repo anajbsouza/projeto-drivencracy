@@ -37,6 +37,7 @@ export async function voteOptions(req, res) {
         if (!poll) return res.sendStatus(404);
 
         const choices = await db.collection("choices").find({ pollId }).toArray();
+        console.log(choices);
         res.send(choices);
     } catch(err) {
         res.status(500).send(err.message);
@@ -51,17 +52,12 @@ export async function showResult(req, res) {
 
         const choices = await db.collection("choices").find({ pollId }).toArray();
 
-        console.log("Choices: ", choices);
-
         let result = null;
         let maxVotes = 0;
 
         for (let choice of choices) {
             const votesCount = await db.collection("votes").countDocuments({ choiceId: choice._id });
-
-            console.log("Current choice: ", choice);
-            console.log("Votes count for current choice: ", votesCount);
-            console.log("Max votes so far: ", maxVotes);
+            console.log("Votes for choice " + choice._id + ": " + votesCount);
 
             if (votesCount > maxVotes) {
                 maxVotes = votesCount;
@@ -70,15 +66,10 @@ export async function showResult(req, res) {
                     votes: votesCount
                 };
             }
-
-            console.log("Current choice: ", choice);
-            console.log("Votes count for current choice: ", votesCount);
-            console.log("Max votes so far: ", maxVotes);
-            
         }
 
         console.log(result)
-        res.status(200).send(poll);
+        res.status(200).send({poll, result});
 
     } catch(err) {
         res.status(500).send(err.message)
